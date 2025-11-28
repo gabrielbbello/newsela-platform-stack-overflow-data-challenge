@@ -1,0 +1,529 @@
+version: 2
+
+sources:
+  - name: stackoverflow
+    description: Public BigQuery dataset containing Stack Overflow historical data.
+    database: bigquery-public-data
+    schema: stackoverflow
+    loader: Public Dataset
+
+    tables:
+      - name: badges
+        description: Awards given to users for specific achievements.
+        columns:
+          - name: id
+            data_type: INT64
+          - name: name
+            data_type: STRING
+          - name: date
+            data_type: TIMESTAMP
+          - name: user_id
+            data_type: INT64
+          - name: class
+            data_type: INT64
+          - name: tag_based
+            data_type: BOOL
+
+      - name: comments
+        description: User comments attached to posts (questions or answers).
+        columns:
+          - name: id
+            data_type: INT64
+          - name: text
+            data_type: STRING
+          - name: creation_date
+            data_type: TIMESTAMP
+          - name: post_id
+            data_type: INT64
+          - name: user_id
+            data_type: INT64
+          - name: user_display_name
+            data_type: STRING
+          - name: score
+            data_type: INT64
+
+      - name: post_history
+        description: Historical archive of all edits and changes to posts.
+        columns:
+          - name: id
+            data_type: INT64
+          - name: creation_date
+            data_type: TIMESTAMP
+          - name: post_id
+            data_type: INT64
+          - name: post_history_type_id
+            data_type: INT64
+          - name: revision_guid
+            data_type: STRING
+          - name: user_id
+            data_type: INT64
+          - name: text
+            data_type: STRING
+          - name: comment
+            data_type: STRING
+
+      - name: post_links
+        description: Links between posts, tracking duplicates and related content.
+        columns:
+          - name: id
+            data_type: INT64
+          - name: creation_date
+            data_type: TIMESTAMP
+          - name: link_type_id
+            data_type: INT64
+          - name: post_id
+            data_type: INT64
+          - name: related_post_id
+            data_type: INT64
+
+      - name: posts_answers
+        description: Responses provided by users to questions.
+        columns:
+          - name: id
+            data_type: INT64
+          - name: title
+            data_type: STRING
+          - name: body
+            data_type: STRING
+          - name: accepted_answer_id
+            data_type: STRING
+          - name: answer_count
+            data_type: STRING
+          - name: comment_count
+            data_type: INT64
+          - name: community_owned_date
+            data_type: TIMESTAMP
+          - name: creation_date
+            data_type: TIMESTAMP
+          - name: favorite_count
+            data_type: STRING
+          - name: last_activity_date
+            data_type: TIMESTAMP
+          - name: last_edit_date
+            data_type: TIMESTAMP
+          - name: last_editor_display_name
+            data_type: STRING
+          - name: last_editor_user_id
+            data_type: INT64
+          - name: owner_display_name
+            data_type: STRING
+          - name: owner_user_id
+            data_type: INT64
+          - name: parent_id
+            data_type: INT64
+          - name: post_type_id
+            data_type: INT64
+          - name: score
+            data_type: INT64
+          - name: tags
+            data_type: STRING
+          - name: view_count
+            data_type: STRING
+
+      - name: posts_questions
+        description: The core table containing questions, tags, and engagement metrics.
+        columns:
+          - name: id
+            data_type: INT64
+          - name: title
+            data_type: STRING
+          - name: body
+            data_type: STRING
+          - name: accepted_answer_id
+            data_type: INT64
+          - name: answer_count
+            data_type: INT64
+          - name: comment_count
+            data_type: INT64
+          - name: community_owned_date
+            data_type: TIMESTAMP
+          - name: creation_date
+            data_type: TIMESTAMP
+          - name: favorite_count
+            data_type: INT64
+          - name: last_activity_date
+            data_type: TIMESTAMP
+          - name: last_edit_date
+            data_type: TIMESTAMP
+          - name: last_editor_display_name
+            data_type: STRING
+          - name: last_editor_user_id
+            data_type: INT64
+          - name: owner_display_name
+            data_type: STRING
+          - name: owner_user_id
+            data_type: INT64
+          - name: parent_id
+            data_type: STRING
+          - name: post_type_id
+            data_type: INT64
+          - name: score
+            data_type: INT64
+          - name: tags
+            data_type: STRING
+          - name: view_count
+            data_type: INT64
+
+      - name: posts_moderator_nomination
+        description: Posts related to community moderator elections.
+        columns:
+          - name: id
+            data_type: INT64
+          - name: title
+            data_type: STRING
+          - name: body
+            data_type: STRING
+          - name: accepted_answer_id
+            data_type: STRING
+          - name: answer_count
+            data_type: STRING
+          - name: comment_count
+            data_type: INT64
+          - name: community_owned_date
+            data_type: TIMESTAMP
+          - name: creation_date
+            data_type: TIMESTAMP
+          - name: favorite_count
+            data_type: STRING
+          - name: last_activity_date
+            data_type: TIMESTAMP
+          - name: last_edit_date
+            data_type: TIMESTAMP
+          - name: last_editor_display_name
+            data_type: STRING
+          - name: last_editor_user_id
+            data_type: INT64
+          - name: owner_display_name
+            data_type: STRING
+          - name: owner_user_id
+            data_type: INT64
+          - name: parent_id
+            data_type: STRING
+          - name: post_type_id
+            data_type: INT64
+          - name: score
+            data_type: INT64
+          - name: tags
+            data_type: STRING
+          - name: view_count
+            data_type: STRING
+
+      - name: posts_orphaned_tag_wiki
+        description: Wiki entries for tags that have been deleted or unlinked.
+        columns:
+          - name: id
+            data_type: INT64
+          - name: title
+            data_type: STRING
+          - name: body
+            data_type: STRING
+          - name: accepted_answer_id
+            data_type: STRING
+          - name: answer_count
+            data_type: STRING
+          - name: comment_count
+            data_type: INT64
+          - name: community_owned_date
+            data_type: TIMESTAMP
+          - name: creation_date
+            data_type: TIMESTAMP
+          - name: favorite_count
+            data_type: STRING
+          - name: last_activity_date
+            data_type: TIMESTAMP
+          - name: last_edit_date
+            data_type: TIMESTAMP
+          - name: last_editor_display_name
+            data_type: STRING
+          - name: last_editor_user_id
+            data_type: INT64
+          - name: owner_display_name
+            data_type: STRING
+          - name: owner_user_id
+            data_type: INT64
+          - name: parent_id
+            data_type: STRING
+          - name: post_type_id
+            data_type: INT64
+          - name: score
+            data_type: INT64
+          - name: tags
+            data_type: STRING
+          - name: view_count
+            data_type: STRING
+
+      - name: posts_privilege_wiki
+        description: Wiki entries describing privilege levels.
+        columns:
+          - name: id
+            data_type: INT64
+          - name: title
+            data_type: STRING
+          - name: body
+            data_type: STRING
+          - name: accepted_answer_id
+            data_type: STRING
+          - name: answer_count
+            data_type: STRING
+          - name: comment_count
+            data_type: INT64
+          - name: community_owned_date
+            data_type: STRING
+          - name: creation_date
+            data_type: TIMESTAMP
+          - name: favorite_count
+            data_type: STRING
+          - name: last_activity_date
+            data_type: TIMESTAMP
+          - name: last_edit_date
+            data_type: TIMESTAMP
+          - name: last_editor_display_name
+            data_type: STRING
+          - name: last_editor_user_id
+            data_type: INT64
+          - name: owner_display_name
+            data_type: STRING
+          - name: owner_user_id
+            data_type: INT64
+          - name: parent_id
+            data_type: STRING
+          - name: post_type_id
+            data_type: INT64
+          - name: score
+            data_type: INT64
+          - name: tags
+            data_type: STRING
+          - name: view_count
+            data_type: STRING
+
+      - name: posts_tag_wiki
+        description: Wiki entries explaining specific tags.
+        columns:
+          - name: id
+            data_type: INT64
+          - name: title
+            data_type: STRING
+          - name: body
+            data_type: STRING
+          - name: accepted_answer_id
+            data_type: STRING
+          - name: answer_count
+            data_type: STRING
+          - name: comment_count
+            data_type: INT64
+          - name: community_owned_date
+            data_type: TIMESTAMP
+          - name: creation_date
+            data_type: TIMESTAMP
+          - name: favorite_count
+            data_type: STRING
+          - name: last_activity_date
+            data_type: TIMESTAMP
+          - name: last_edit_date
+            data_type: TIMESTAMP
+          - name: last_editor_display_name
+            data_type: STRING
+          - name: last_editor_user_id
+            data_type: INT64
+          - name: owner_display_name
+            data_type: STRING
+          - name: owner_user_id
+            data_type: INT64
+          - name: parent_id
+            data_type: STRING
+          - name: post_type_id
+            data_type: INT64
+          - name: score
+            data_type: INT64
+          - name: tags
+            data_type: STRING
+          - name: view_count
+            data_type: STRING
+
+      - name: posts_tag_wiki_excerpt
+        description: Short summaries of tags shown in tooltips.
+        columns:
+          - name: id
+            data_type: INT64
+          - name: title
+            data_type: STRING
+          - name: body
+            data_type: STRING
+          - name: accepted_answer_id
+            data_type: STRING
+          - name: answer_count
+            data_type: STRING
+          - name: comment_count
+            data_type: INT64
+          - name: community_owned_date
+            data_type: TIMESTAMP
+          - name: creation_date
+            data_type: TIMESTAMP
+          - name: favorite_count
+            data_type: STRING
+          - name: last_activity_date
+            data_type: TIMESTAMP
+          - name: last_edit_date
+            data_type: TIMESTAMP
+          - name: last_editor_display_name
+            data_type: STRING
+          - name: last_editor_user_id
+            data_type: INT64
+          - name: owner_display_name
+            data_type: STRING
+          - name: owner_user_id
+            data_type: INT64
+          - name: parent_id
+            data_type: STRING
+          - name: post_type_id
+            data_type: INT64
+          - name: score
+            data_type: INT64
+          - name: tags
+            data_type: STRING
+          - name: view_count
+            data_type: STRING
+
+      - name: posts_wiki_placeholder
+        description: Placeholder table for wiki content structure.
+        columns:
+          - name: id
+            data_type: INT64
+          - name: title
+            data_type: STRING
+          - name: body
+            data_type: STRING
+          - name: accepted_answer_id
+            data_type: STRING
+          - name: answer_count
+            data_type: STRING
+          - name: comment_count
+            data_type: INT64
+          - name: community_owned_date
+            data_type: STRING
+          - name: creation_date
+            data_type: TIMESTAMP
+          - name: favorite_count
+            data_type: STRING
+          - name: last_activity_date
+            data_type: TIMESTAMP
+          - name: last_edit_date
+            data_type: TIMESTAMP
+          - name: last_editor_display_name
+            data_type: STRING
+          - name: last_editor_user_id
+            data_type: INT64
+          - name: owner_display_name
+            data_type: STRING
+          - name: owner_user_id
+            data_type: INT64
+          - name: parent_id
+            data_type: STRING
+          - name: post_type_id
+            data_type: INT64
+          - name: score
+            data_type: INT64
+          - name: tags
+            data_type: STRING
+          - name: view_count
+            data_type: STRING
+
+      - name: stackoverflow_posts
+        description: Deprecated legacy table containing mixed post types.
+        columns:
+          - name: id
+            data_type: INT64
+          - name: title
+            data_type: STRING
+          - name: body
+            data_type: STRING
+          - name: accepted_answer_id
+            data_type: INT64
+          - name: answer_count
+            data_type: INT64
+          - name: comment_count
+            data_type: INT64
+          - name: community_owned_date
+            data_type: TIMESTAMP
+          - name: creation_date
+            data_type: TIMESTAMP
+          - name: favorite_count
+            data_type: INT64
+          - name: last_activity_date
+            data_type: TIMESTAMP
+          - name: last_edit_date
+            data_type: TIMESTAMP
+          - name: last_editor_display_name
+            data_type: STRING
+          - name: last_editor_user_id
+            data_type: INT64
+          - name: owner_display_name
+            data_type: STRING
+          - name: owner_user_id
+            data_type: INT64
+          - name: parent_id
+            data_type: INT64
+          - name: post_type_id
+            data_type: INT64
+          - name: score
+            data_type: INT64
+          - name: tags
+            data_type: STRING
+          - name: view_count
+            data_type: INT64
+
+      - name: tags
+        description: Registry of all tags and their total counts.
+        columns:
+          - name: id
+            data_type: INT64
+          - name: tag_name
+            data_type: STRING
+          - name: count
+            data_type: INT64
+          - name: excerpt_post_id
+            data_type: INT64
+          - name: wiki_post_id
+            data_type: INT64
+
+      - name: users
+        description: Registered users on the platform.
+        columns:
+          - name: id
+            data_type: INT64
+          - name: display_name
+            data_type: STRING
+          - name: about_me
+            data_type: STRING
+          - name: age
+            data_type: STRING
+          - name: creation_date
+            data_type: TIMESTAMP
+          - name: last_access_date
+            data_type: TIMESTAMP
+          - name: location
+            data_type: STRING
+          - name: reputation
+            data_type: INT64
+          - name: up_votes
+            data_type: INT64
+          - name: down_votes
+            data_type: INT64
+          - name: views
+            data_type: INT64
+          - name: profile_image_url
+            data_type: STRING
+          - name: website_url
+            data_type: STRING
+
+      - name: votes
+        description: Logs of user votes (Up/Down) on posts.
+        columns:
+          - name: id
+            data_type: INT64
+          - name: creation_date
+            data_type: TIMESTAMP
+          - name: post_id
+            data_type: INT64
+          - name: vote_type_id
+            data_type: INT64
