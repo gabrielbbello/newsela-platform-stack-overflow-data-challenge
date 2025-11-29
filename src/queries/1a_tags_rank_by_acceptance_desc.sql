@@ -2,22 +2,22 @@
     Question 1a: Top Performing Tags
     Author: Senior Data Engineer Candidate
     Purpose: Identify individual tags with the highest resolution rates (Accepted Answers) in the current year.
-    
+
     Statistical Threshold: P90 (>= 75 questions) to ensure statistical significance and eliminate small sample bias.
 */
 
 WITH daily_questions AS (
     -- Base Filtering (project pruning & predicate pushdown)
     -- Initial filtering occurs to minimize memory usage in subsequent string operations
-    SELECT 
+    SELECT
         id,
-        tags, 
+        tags,
         answer_count,
         -- Converts NULL accepted_answer_id to 0 for easier calculations
         CASE WHEN accepted_answer_id IS NOT NULL THEN 1 ELSE 0 END AS has_accepted_answer
-    FROM 
+    FROM
         `bigquery-public-data.stackoverflow.posts_questions`
-    WHERE 
+    WHERE
         -- Hard filter on 2022 per data profiling findings
         EXTRACT(YEAR FROM creation_date) = 2022
         AND tags IS NOT NULL
@@ -30,14 +30,14 @@ exploded_tags AS (
         tag,
         answer_count,
         has_accepted_answer
-    FROM 
+    FROM
         daily_questions,
         UNNEST(SPLIT(tags, '|')) AS tag
 ),
 
 individual_tag_metrics AS (
     -- Aggregation per individual tag
-    SELECT 
+    SELECT
         'Individual Tag' AS dimension_type,
         tag AS dimension_name,
         COUNT(*) AS question_volume,
@@ -45,15 +45,15 @@ individual_tag_metrics AS (
         SUM(has_accepted_answer) AS total_accepted,
         ROUND(AVG(answer_count), 2) AS avg_answers_per_question,
         ROUND(SAFE_DIVIDE(SUM(has_accepted_answer), COUNT(*)), 4) AS accepted_rate
-    FROM 
+    FROM
         exploded_tags
-    GROUP BY 
+    GROUP BY
         tag
 ),
 
 combination_metrics AS (
     -- Aggregation per tag combination (original context)
-    SELECT 
+    SELECT
         'Tag Combination' AS dimension_type,
         tags AS dimension_name,
         COUNT(*) AS question_volume,
@@ -61,9 +61,9 @@ combination_metrics AS (
         SUM(has_accepted_answer) AS total_accepted,
         ROUND(AVG(answer_count), 2) AS avg_answers_per_question,
         ROUND(SAFE_DIVIDE(SUM(has_accepted_answer), COUNT(*)), 4) AS accepted_rate
-    FROM 
+    FROM
         daily_questions
-    GROUP BY 
+    GROUP BY
         tags
 ),
 
@@ -76,11 +76,10 @@ unified_analysis AS (
 )
 
 -- Top 20 best performing tags (highest acceptance)
-SELECT 
-    *
-FROM 
+SELECT *
+FROM
     unified_analysis
-ORDER BY 
+ORDER BY
     accepted_rate DESC,
     question_volume DESC
 LIMIT 20;
